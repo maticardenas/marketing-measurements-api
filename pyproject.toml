@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "marketing-measurements-op"
+version = "0.1.0"
+description = "Marketing Measurement Data (Objective Platform)"
+authors = ["Matias Cardenas <cardenasmatias.1990@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = "^8.2.2"
+django-ninja = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
