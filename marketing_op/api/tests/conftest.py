@@ -1,4 +1,6 @@
 import pytest
+
+from api.tests.factories import ConversionFactory
 from core.models import Product, Campaign, CampaignType, Conversion, Channel
 
 
@@ -29,3 +31,8 @@ def conversion(campaign: Campaign):
         date="2022-06-08",
         conversions=1.0,
     )
+
+
+@pytest.fixture
+def multiple_conversions(campaign: Campaign):
+    ConversionFactory.create_batch(10)

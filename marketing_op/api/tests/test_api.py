@@ -61,3 +61,12 @@ def test_get_marketing_data_multiple_values_same_property(
             "conversions": 1.0,
         }
     ]
+
+
+def test_get_multiple_conversions(client: TestClient, multiple_conversions):
+    # given - when
+    response = client.get("/")
+
+    # then
+    assert response.status_code == HTTPStatus.OK
+    assert len(response.json()) == 10
