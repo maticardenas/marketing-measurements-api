@@ -1,0 +1,76 @@
+version: '3'
+
+env:
+  DOCKER_COMPOSE: docker-compose -f docker-compose.local.yaml
+
+tasks:
+  rebuild-project:
+    desc: Rebuild the project
+    cmds:
+      - $DOCKER_COMPOSE down
+      - yes | docker system prune -a --volumes
+      - $DOCKER_COMPOSE build
+
+  run:
+    desc: Run the project
+    cmds:
+      - $DOCKER_COMPOSE up
+
+  run-detached:
+    desc: Run the project
+    cmds:
+      - $DOCKER_COMPOSE up -d
+
+  down:
+    desc: Bring project down
+    cmds:
+      - $DOCKER_COMPOSE down
+
+  lint:
+    desc: lint
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m ruff format marketing_op/"
+
+  follow-service-logs:
+    desc: Follow the logs of the service
+    cmds:
+      - $DOCKER_COMPOSE logs -f marketing_op
+
+  test:
+    desc: Run all the tests
+    cmds:
+      - |
+        if [ -z {{.CLI_ARGS}} ]; then
+          echo "Executing all tests"
+          $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/"
+        else
+          for arg in {{.CLI_ARGS}}; do
+            echo "Executing tests for app: $arg"
+            $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/${arg}"
+          done
+        fi
+    silent: true
+
+  container-shell:
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "bash"
+
+  django-shell:
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python marketing_op/manage.py shell"
+
+  dbshell:
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python marketing_op/manage.py dbshell"
+
+  create-django-app:
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "cd marketing_op/ && poetry run python manage.py startapp {{.CLI_ARGS}}"
+    silent: true
+
+  run-django-command:
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python marketing_op/manage.py {{.CLI_ARGS}}"
+    silent: true
+
+
