@@ -15,7 +15,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
-    name = factory.Faker("pystr", max_chars=15)
+    name = factory.Faker("name")
 
 
 class CampaignTypeFactory(factory.django.DjangoModelFactory):
@@ -29,7 +29,7 @@ class CampaignFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Campaign
 
-    name = factory.Faker("pystr", max_chars=15)
+    name = factory.Faker("name")
     product = factory.SubFactory(ProductFactory)
     campaign_type = factory.Iterator(CampaignType.objects.all())
 
