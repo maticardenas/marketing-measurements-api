@@ -1,6 +1,8 @@
 from django.http import HttpRequest
 from ninja import NinjaAPI, Router, Query
+from ninja.pagination import paginate
 
+from api.pagination import MarketingDataPagination
 from api.schemas import MarketingDataSchema, MarketingDataFilterSchema
 from api.services.marketing import get_marketing_data
 
@@ -13,6 +15,7 @@ router = Router()
     "/",
     response={200: list[MarketingDataSchema]},
 )
+@paginate(MarketingDataPagination)
 def get_marketing_measurements(
     request: HttpRequest, filters: MarketingDataFilterSchema = Query(None)
 ):
