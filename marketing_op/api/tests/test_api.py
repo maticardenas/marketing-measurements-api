@@ -3,6 +3,7 @@ from http import HTTPStatus
 import pytest
 
 from api.marketing_measurements import router
+from api.tests.factories import ConversionFactory, CampaignFactory
 from core.models import Conversion
 from ninja.testing import TestClient
 
@@ -74,3 +75,33 @@ def test_get_multiple_conversions(
     # then
     assert response.status_code == HTTPStatus.OK
     assert len(response.json()) == 10
+
+
+def test_get_conversions_filter_by_date(client: TestClient):
+    # given
+    ConversionFactory(
+        campaign=CampaignFactory(name="earlier_campaign"),
+        date="2021-01-01",
+    )
+    ConversionFactory(
+        campaign=CampaignFactory(name="later_campaign"),
+        date="2023-02-01",
+    )
+    query = "?start_date=2021-01-01&end_date=2022-01-31"
+
+    # when - then
+    response = client.get(f"/{query}")
+
+    assert response.status_code == HTTPStatus.OK
+    assert len(response.json()) == 1
+    assert response.json()[0]["campaign"] == "earlier_campaign"
+    assert response.json()[0]["date"] == "2021-01-01"
+
+    query = "?start_date=2023-01-01"
+
+    response = client.get(f"/{query}")
+
+    assert response.status_code == HTTPStatus.OK
+    assert len(response.json()) == 1
+    assert response.json()[0]["campaign"] == "later_campaign"
+    assert response.json()[0]["date"] == "2023-02-01"
