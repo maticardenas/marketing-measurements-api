@@ -7,6 +7,7 @@ from core.models import Conversion, Channel, Product, Campaign, CampaignType
 class ChannelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Channel
+        django_get_or_create = ("name",)
 
     name = factory.Iterator([channel[0] for channel in CHANNELS])
 
@@ -21,6 +22,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
 class CampaignTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CampaignType
+        django_get_or_create = ("name",)
 
     name = factory.Iterator([campaign_type[0] for campaign_type in CAMPAIGN_TYPES])
 
@@ -31,7 +33,7 @@ class CampaignFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker("name")
     product = factory.SubFactory(ProductFactory)
-    campaign_type = factory.Iterator(CampaignType.objects.all())
+    campaign_type = factory.SubFactory(CampaignTypeFactory)
 
 
 class ConversionFactory(factory.django.DjangoModelFactory):
@@ -39,6 +41,6 @@ class ConversionFactory(factory.django.DjangoModelFactory):
         model = Conversion
 
     campaign = factory.SubFactory(CampaignFactory)
-    channel = factory.Iterator(Channel.objects.all())
+    channel = factory.SubFactory(ChannelFactory)
     date = factory.Faker("date")
     conversions = factory.Faker("pyfloat", min_value=0, max_value=10000)

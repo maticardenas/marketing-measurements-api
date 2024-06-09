@@ -23,10 +23,10 @@ def get_marketing_data(
         query &= Q(channel__name__in=channels)
     if campaigns:
         query &= Q(campaign__name__in=campaigns)
-    # if start_date:
-    #     query &= Q(date__gte=start_date)
-    # if end_date:
-    #     query &= Q(date__lte=end_date)
+    if start_date:
+        query &= Q(date__gte=start_date)
+    if end_date:
+        query &= Q(date__lte=end_date)
 
     # Retrieve the filtered conversions and include related objects
     marketing_data_conversions = Conversion.objects.filter(query).select_related(

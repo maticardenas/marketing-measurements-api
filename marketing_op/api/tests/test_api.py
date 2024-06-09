@@ -20,11 +20,12 @@ def test_get_marketing_data(client: TestClient, conversion: Conversion):
     assert response.status_code == HTTPStatus.OK
     assert response.json() == [
         {
-            "product": "test_product",
-            "campaign_type": "branding",
-            "channel": "radio",
-            "date": "2022-06-08T00:00:00",
-            "conversions": 1.0,
+            "product": conversion.campaign.product.name,
+            "campaign": conversion.campaign.name,
+            "campaign_type": conversion.campaign.campaign_type.name,
+            "channel": conversion.channel.name,
+            "date": conversion.date,
+            "conversions": conversion.conversions,
         }
     ]
 
@@ -54,16 +55,19 @@ def test_get_marketing_data_multiple_values_same_property(
     assert response.status_code == HTTPStatus.OK
     assert response.json() == [
         {
-            "product": "test_product",
-            "campaign_type": "branding",
-            "channel": "radio",
-            "date": "2022-06-08T00:00:00",
-            "conversions": 1.0,
+            "product": conversion.campaign.product.name,
+            "campaign": conversion.campaign.name,
+            "campaign_type": conversion.campaign.campaign_type.name,
+            "channel": conversion.channel.name,
+            "date": conversion.date,
+            "conversions": conversion.conversions,
         }
     ]
 
 
-def test_get_multiple_conversions(client: TestClient, multiple_conversions):
+def test_get_multiple_conversions(
+    client: TestClient, multiple_conversions: list[Conversion]
+):
     # given - when
     response = client.get("/")
 

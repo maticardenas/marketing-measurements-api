@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date as datetime_date
 
 from ninja import Schema
 from pydantic import BaseModel
@@ -7,8 +7,9 @@ from pydantic import BaseModel
 class MarketingDataSchema(BaseModel):
     product: str | None = None
     campaign_type: str | None = None
+    campaign: str | None = None
     channel: str | None = None
-    date: datetime | None = None
+    date: datetime_date | None = None
     conversions: float | None = None
 
 
@@ -17,3 +18,5 @@ class MarketingDataFilterSchema(Schema):
     campaigns: list[str] | None = None
     campaign_types: list[str] | None = None
     channels: list[str] | None = None
+    start_date: datetime_date | None = None
+    end_date: datetime_date | None = None
