@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from api.services.marketing import get_marketing_data
+from api.services.marketing_measurements import get_marketing_data
 from core.models import Conversion
 
 
@@ -18,7 +18,9 @@ def test_get_marketing_data(conversion: Conversion):
 
 def test_get_marketing_data_not_found(conversion: Conversion):
     # given - when
-    marketing_data = get_marketing_data(channels=["tv"])
+    marketing_data = get_marketing_data(
+        filters={"channels": ["tv"]},
+    )
 
     # then
     assert len(marketing_data) == 0
@@ -26,7 +28,9 @@ def test_get_marketing_data_not_found(conversion: Conversion):
 
 def test_get_marketing_data_multiple_values_same_property(conversion: Conversion):
     # given - when
-    marketing_data = get_marketing_data(channels=["tv", "radio"])
+    marketing_data = get_marketing_data(
+        filters={"channels": ["tv", "radio"]},
+    )
 
     # then
     assert len(marketing_data) == 1

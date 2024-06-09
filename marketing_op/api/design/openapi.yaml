@@ -1,0 +1,165 @@
+openapi: 3.1.0
+info:
+  title: Marketing Data (Objective Platform)
+  version: 1.0.0
+  description: "API for fetching marketing data measurements and insights."
+paths:
+  /api/marketing-measurements/:
+    get:
+      operationId: marketing-measurements
+      summary: Get Marketing Measurements
+      parameters:
+      - in: query
+        name: products
+        schema:
+          type: array
+          items:
+            type: string
+          title: Products
+        required: false
+      - in: query
+        name: campaigns
+        schema:
+          type: array
+          items:
+              type: string
+        required: false
+      - in: query
+        name: campaign_types
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+              - always on
+              - branding
+              - performance
+        required: false
+      - in: query
+        name: channels
+        schema:
+         type: array
+         items:
+          type: string
+          enum:
+            - tv
+            - radio
+            - ooh
+            - facebook
+            - print
+            - tiktok
+            - instagram
+            - db360 - prospecting
+            - db360 - retargeting
+            - google - branded search
+            - google - non-branded search
+            - dv360 - prospecting
+            - dv360 - retargeting
+            - folder
+        required: false
+      - in: query
+        name: start_date
+        schema:
+          format: date
+          type: string
+          title: Start Date
+        required: false
+      - in: query
+        name: end_date
+        schema:
+          type: string
+          format: date
+          title: End Date
+        required: false
+      - in: query
+        name: offset
+        schema:
+          default: 0
+          minimum: 0
+          title: Offset
+          type: integer
+        required: false
+      - in: query
+        name: page_size
+        schema:
+          default: 10
+          exclusiveMinimum: 0
+          maximum: 100
+          title: Page Size
+          type: integer
+        required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: "#/components/schemas/MarketingDataSchema"
+                    title: Data
+                    type: array
+                    total: 1
+                required:
+                  - data
+              examples:
+                MarketingData:
+                  summary: Marketing Data
+                  value:
+                    data:
+                      - product: "Product A"
+                        campaign_type: "always on"
+                        campaign: "launch campaign new apple brand"
+                        channel: "tv"
+                        date: "2021-01-01"
+                        conversions: 1225.0170852049143
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    MarketingDataSchema:
+      properties:
+        product:
+         type: string
+         example: "Product A"
+        campaign_type:
+          type: string
+          example: "always on"
+          enum:
+            - always on
+            - branding
+            - performance
+        campaign:
+          type: string
+          example: "launch campaign new apple brand"
+        channel:
+          type: string
+          enum:
+            - tv
+            - radio
+            - ooh
+            - facebook
+            - print
+            - tiktok
+            - instagram
+            - db360 - prospecting
+            - db360 - retargeting
+            - google - branded search
+            - google - non-branded search
+            - dv360 - prospecting
+            - dv360 - retargeting
+            - folder
+          example: "tv"
+        date:
+          type: string
+          format: date
+          example: "2021-01-01"
+        conversions:
+          type: number
+          example: 1225.0170852049143
+      title: MarketingDataSchema
+      type: object
+servers: []

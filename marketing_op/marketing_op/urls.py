@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from api.marketing_measurements import api
+from api.marketing_op_api import api
 
 urlpatterns = [
     path("admin/", admin.site.urls),

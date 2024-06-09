@@ -20,3 +20,8 @@ class MarketingDataFilterSchema(Schema):
     channels: list[str] | None = None
     start_date: datetime_date | None = None
     end_date: datetime_date | None = None
+
+
+class ChannelSalesPercentageSchema(Schema):
+    channel: str
+    percentage: str
