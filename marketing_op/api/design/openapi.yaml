@@ -62,21 +62,18 @@ paths:
         schema:
           format: date
           type: string
-          title: Start Date
         required: false
       - in: query
         name: end_date
         schema:
           type: string
           format: date
-          title: End Date
         required: false
       - in: query
         name: offset
         schema:
           default: 0
           minimum: 0
-          title: Offset
           type: integer
         required: false
       - in: query
@@ -85,7 +82,6 @@ paths:
           default: 10
           exclusiveMinimum: 0
           maximum: 100
-          title: Page Size
           type: integer
         required: false
       responses:
@@ -118,6 +114,214 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
+  /api/marketing/stats/channel-sales-percentages/:
+    get:
+      operationId: api_marketing_op_api_channel_sales_percentages
+      summary: Channel Sales Percentages
+      parameters:
+        - in: query
+          name: products
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+        - in: query
+          name: campaigns
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+        - in: query
+          name: campaign_types
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - always on
+                - branding
+                - performance
+          required: false
+        - in: query
+          name: channels
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - tv
+                - radio
+                - ooh
+                - facebook
+                - print
+                - tiktok
+                - instagram
+                - db360 - prospecting
+                - db360 - retargeting
+                - google - branded search
+                - google - non-branded search
+                - dv360 - prospecting
+                - dv360 - retargeting
+                - folder
+          required: false
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+          example: "2021-01-01"
+          required: false
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+          example: "2021-05-01"
+          required: false
+        - in: query
+          name: offset
+          schema:
+            default: 0
+            minimum: 0
+            type: integer
+          required: false
+        - in: query
+          name: page_size
+          schema:
+            default: 10
+            exclusiveMinimum: 0
+            maximum: 100
+            type: integer
+          required: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: "#/components/schemas/ChannelSalesPercentageSchema"
+                    type: array
+                required:
+                  - data
+              examples:
+                ChannelSalesPercentage:
+                  summary: Channel Sales Percentage
+                  value:
+                    data:
+                      - channel: "tv"
+                        percentage: "10.00"
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+    /api/marketing/stats/channel-weekly-sales/:
+      get:
+        operationId: api_marketing_op_api_channel_weekly_sales
+        summary: Channel Weekly Sales
+        parameters:
+          - in: query
+            name: products
+            schema:
+              type: array
+              items:
+                type: string
+            required: false
+          - in: query
+            name: campaigns
+            schema:
+              type: array
+              items:
+               type: string
+            required: false
+          - in: query
+            name: campaign_types
+            schema:
+              type: array
+              items:
+               type: string
+               enum:
+                 - always on
+                 - branding
+                 - performance
+            required: false
+          - in: query
+            name: channels
+            schema:
+              type: array
+              items:
+               type: string
+               enum:
+                 - tv
+                 - radio
+                 - ooh
+                 - facebook
+                 - print
+                 - tiktok
+                 - instagram
+                 - db360 - prospecting
+                 - db360 - retargeting
+                 - google - branded search
+                 - google - non-branded search
+                 - dv360 - prospecting
+                 - dv360 - retargeting
+                 - folder
+            required: false
+          - in: query
+            name: start_date
+            schema:
+              type: string
+              format: date
+            required: false
+          - in: query
+            name: end_date
+            schema:
+              type: string
+              format: date
+            required: false
+          - in: query
+            name: offset
+            schema:
+              default: 0
+              minimum: 0
+              type: integer
+            required: false
+          - in: query
+            name: page_size
+            schema:
+              default: 10
+              exclusiveMinimum: 0
+              maximum: 100
+              type: integer
+            required: false
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  properties:
+                    data:
+                      items:
+                        $ref: "#/components/schemas/ChannelWeeklySalesSchema"
+                      title: Data
+                      type: array
+                      total: 1
+                  required:
+                    - data
+                examples:
+                  ChannelWeeklySales:
+                    summary: Channel Weekly Sales
+                    value:
+                    data:
+                      - channel: "tv"
+                        year: 2024
+                        week: 3
+                        sales: 1225.0170852049143
 components:
   schemas:
     MarketingDataSchema:
@@ -162,4 +366,65 @@ components:
           example: 1225.0170852049143
       title: MarketingDataSchema
       type: object
+    ChannelSalesPercentageSchema:
+      properties:
+        channel:
+          type: string
+          enum:
+            - tv
+            - radio
+            - ooh
+            - facebook
+            - print
+            - tiktok
+            - instagram
+            - db360 - prospecting
+            - db360 - retargeting
+            - google - branded search
+            - google - non-branded search
+            - dv360 - prospecting
+            - dv360 - retargeting
+            - folder
+        percentage:
+          type: string
+          example: "10.00"
+      required:
+        - channel
+        - percentage
+      type: object
+    ChannelWeeklySalesSchema:
+      properties:
+        channel:
+          type: string
+          enum:
+            - tv
+            - radio
+            - ooh
+            - facebook
+            - print
+            - tiktok
+            - instagram
+            - db360 - prospecting
+            - db360 - retargeting
+            - google - branded search
+            - google - non-branded search
+            - dv360 - prospecting
+            - dv360 - retargeting
+            - folder
+        year:
+          type: integer
+          example: 2024
+        week:
+          type: integer
+          example: 3
+        sales:
+          type: number
+          example: 1225.0170852049143
+      required:
+        - channel
+        - year
+        - week
+        - sales
+      type: object
+
 servers: []

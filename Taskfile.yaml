@@ -73,4 +73,8 @@ tasks:
       - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python marketing_op/manage.py {{.CLI_ARGS}}"
     silent: true
 
+  generate-openapi-html:
+    cmds:
+      - npx @redocly/cli build-docs marketing_op/api/design/openapi.yaml --output marketing_op/api/design/index.html
+    silent: true
 
