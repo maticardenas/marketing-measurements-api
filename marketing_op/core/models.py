@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db import models
 
 from core.constants import CAMPAIGN_TYPES, CHANNELS
@@ -41,3 +43,11 @@ class Conversion(models.Model):
 
     def __str__(self):
         return f"{self.campaign.name} - {self.channel.name} - {self.date}"
+
+
+class APIToken(models.Model):
+    token = models.UUIDField(default=uuid4, unique=True)
+    user = models.CharField(max_length=255)  # In real world should be a User instance.
+
+    def __str__(self):
+        return str(self.token)

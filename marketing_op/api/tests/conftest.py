@@ -1,7 +1,10 @@
+import base64
+
 import pytest
 from ninja.testing import TestClient
 
-from api.marketing_op_api import router
+from api.marketing_op_api import router, auth_router
+from api.services.auth import generate_token
 from api.tests.factories import (
     ConversionFactory,
     ProductFactory,
@@ -52,3 +55,28 @@ def multiple_conversions() -> list[Conversion]:
 @pytest.fixture
 def client():
     return TestClient(router)
+
+
+@pytest.fixture
+def auth_client() -> TestClient:
+    return TestClient(auth_router)
+
+
+@pytest.fixture
+def auth_headers():
+    username = "marketing_op"
+    password = "marketing_op_supersecret"
+    encoded_creds = base64.b64encode(f"{username}:{password}".encode("utf-8")).decode(
+        "utf-8"
+    )
+    return {"Authorization": f"Basic {encoded_creds}"}
+
+
+@pytest.fixture
+def token():
+    return generate_token("marketing_op")
+
+
+@pytest.fixture()
+def token_auth_headers(token: str):
+    return {"Authorization": f"Bearer {token}"}

@@ -3,7 +3,7 @@ from ninja.testing import TestClient
 from api.tests.factories import ConversionFactory, ChannelFactory
 
 
-def test_channel_sales_percentage(client: TestClient):
+def test_channel_sales_percentage(client: TestClient, token_auth_headers: dict):
     # given
     ConversionFactory(
         channel=ChannelFactory(name="radio"),
@@ -22,7 +22,9 @@ def test_channel_sales_percentage(client: TestClient):
     )
 
     # when
-    response = client.get("stats/channel-sales-percentages/")
+    response = client.get(
+        "stats/channel-sales-percentages/", headers=token_auth_headers
+    )
 
     # then
     assert response.json() == {
@@ -33,7 +35,7 @@ def test_channel_sales_percentage(client: TestClient):
     }
 
 
-def test_get_channel_weekly_sales(client: TestClient):
+def test_get_channel_weekly_sales(client: TestClient, token_auth_headers: dict):
     # given
     ConversionFactory(
         channel=ChannelFactory(name="radio"),
@@ -62,7 +64,7 @@ def test_get_channel_weekly_sales(client: TestClient):
     )
 
     # when
-    response = client.get("stats/channel-weekly-sales/")
+    response = client.get("stats/channel-weekly-sales/", headers=token_auth_headers)
 
     # then
     assert response.json() == {

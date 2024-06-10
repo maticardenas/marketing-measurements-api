@@ -6,9 +6,14 @@ from core.models import Conversion
 from ninja.testing import TestClient
 
 
-def test_get_marketing_data(client: TestClient, conversion: Conversion):
+def test_get_marketing_data(
+    client: TestClient, conversion: Conversion, token_auth_headers: dict
+):
     # given - when
-    response = client.get("/measurements/")
+    response = client.get(
+        "/measurements/",
+        headers=token_auth_headers,
+    )
 
     # then
     assert response.status_code == HTTPStatus.OK
@@ -26,12 +31,25 @@ def test_get_marketing_data(client: TestClient, conversion: Conversion):
     }
 
 
-def test_get_marketing_data_no_data(client: TestClient, conversion: Conversion):
+def test_unauthorized_access(client: TestClient):
+    # given - when
+    response = client.get("/measurements/")
+
+    # then
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+
+
+def test_get_marketing_data_no_data(
+    client: TestClient, conversion: Conversion, token_auth_headers: dict
+):
     # given
     query = "?channels=tv"
 
     # when
-    response = client.get(f"/measurements/{query}")
+    response = client.get(
+        f"/measurements/{query}",
+        headers=token_auth_headers,
+    )
 
     # then
     assert response.status_code == HTTPStatus.OK
@@ -39,13 +57,16 @@ def test_get_marketing_data_no_data(client: TestClient, conversion: Conversion):
 
 
 def test_get_marketing_data_multiple_values_same_property(
-    client: TestClient, conversion: Conversion
+    client: TestClient, conversion: Conversion, token_auth_headers: dict
 ):
     # given
     query = "?channels=tv&channels=radio"
 
     # when
-    response = client.get(f"/measurements/{query}")
+    response = client.get(
+        f"/measurements/{query}",
+        headers=token_auth_headers,
+    )
 
     # then
     assert response.status_code == HTTPStatus.OK
@@ -64,17 +85,20 @@ def test_get_marketing_data_multiple_values_same_property(
 
 
 def test_get_multiple_conversions(
-    client: TestClient, multiple_conversions: list[Conversion]
+    client: TestClient, multiple_conversions: list[Conversion], token_auth_headers: dict
 ):
     # given - when
-    response = client.get("/measurements/")
+    response = client.get(
+        "/measurements/",
+        headers=token_auth_headers,
+    )
 
     # then
     assert response.status_code == HTTPStatus.OK
     assert len(response.json()["data"]) == 10
 
 
-def test_get_conversions_filter_by_date(client: TestClient):
+def test_get_conversions_filter_by_date(client: TestClient, token_auth_headers: dict):
     # given
     ConversionFactory(
         campaign=CampaignFactory(name="earlier_campaign"),
@@ -87,7 +111,10 @@ def test_get_conversions_filter_by_date(client: TestClient):
     query = "?start_date=2021-01-01&end_date=2022-01-31"
 
     # when - then
-    response = client.get(f"/measurements/{query}")
+    response = client.get(
+        f"/measurements/{query}",
+        headers=token_auth_headers,
+    )
 
     assert response.status_code == HTTPStatus.OK
     assert len(response.json()) == 1
@@ -96,7 +123,10 @@ def test_get_conversions_filter_by_date(client: TestClient):
 
     query = "?start_date=2023-01-01"
 
-    response = client.get(f"/measurements/{query}")
+    response = client.get(
+        f"/measurements/{query}",
+        headers=token_auth_headers,
+    )
 
     assert response.status_code == HTTPStatus.OK
     assert len(response.json()) == 1
