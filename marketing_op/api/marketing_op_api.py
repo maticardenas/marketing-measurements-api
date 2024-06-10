@@ -7,9 +7,13 @@ from api.schemas import (
     MarketingDataSchema,
     MarketingDataFilterSchema,
     ChannelSalesPercentageSchema,
+    ChannelWeeklySalesSchema,
 )
 from api.services.marketing_measurements import get_marketing_data
-from api.services.marketing_stats import get_channel_sales_percentages
+from api.services.marketing_stats import (
+    get_channel_sales_percentages,
+    get_channel_weekly_sales,
+)
 
 api = NinjaAPI()
 
@@ -37,6 +41,18 @@ def channel_sales_percentages(
     request: HttpRequest, filters: MarketingDataFilterSchema = Query(None)
 ):
     data = get_channel_sales_percentages(filters.dict() if filters else {})
+    return data
+
+
+@router.get(
+    "/stats/channel-weekly-sales/",
+    response={200: list[ChannelWeeklySalesSchema]},
+)
+@paginate(MarketingDataPagination)
+def channel_weekly_sales(
+    request: HttpRequest, filters: MarketingDataFilterSchema = Query(None)
+):
+    data = get_channel_weekly_sales(filters.dict() if filters else {})
     return data
 
 

@@ -25,3 +25,10 @@ class MarketingDataFilterSchema(Schema):
 class ChannelSalesPercentageSchema(Schema):
     channel: str
     percentage: str
+
+
+class ChannelWeeklySalesSchema(Schema):
+    channel: str
+    year: int
+    week: int
+    sales: float
