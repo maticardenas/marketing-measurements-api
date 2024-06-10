@@ -1,16 +1,9 @@
 from http import HTTPStatus
 
-import pytest
 
-from api.marketing_op_api import router
 from api.tests.factories import ConversionFactory, CampaignFactory
 from core.models import Conversion
 from ninja.testing import TestClient
-
-
-@pytest.fixture
-def client():
-    return TestClient(router)
 
 
 def test_get_marketing_data(client: TestClient, conversion: Conversion):

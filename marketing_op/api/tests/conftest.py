@@ -1,5 +1,7 @@
 import pytest
+from ninja.testing import TestClient
 
+from api.marketing_op_api import router
 from api.tests.factories import (
     ConversionFactory,
     ProductFactory,
@@ -45,3 +47,8 @@ def conversion() -> Conversion:
 def multiple_conversions() -> list[Conversion]:
     multiple_conversions = ConversionFactory.create_batch(10)
     return multiple_conversions
+
+
+@pytest.fixture
+def client():
+    return TestClient(router)
