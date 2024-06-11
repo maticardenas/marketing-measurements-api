@@ -17,7 +17,7 @@ from api.services.marketing_stats import (
     get_channel_weekly_sales,
 )
 
-api = NinjaAPI()
+ninja_api = NinjaAPI()
 
 router = Router()
 
@@ -77,5 +77,5 @@ def get_token(request: HttpRequest):
     return {"data": {"token": token}}
 
 
-api.add_router("/marketing", router)
-api.add_router("/auth", auth_router)
+ninja_api.add_router("/marketing", router)
+ninja_api.add_router("/auth", auth_router)

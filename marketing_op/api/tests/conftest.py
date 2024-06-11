@@ -20,6 +20,20 @@ from pathlib import Path
 CURRENT_DIR = Path(__file__).resolve().parent
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--contract",
+        action="store_true",
+        default=False,
+        help="Run contract validation in tests",
+    )
+
+
+@pytest.fixture
+def contract_enabled(request):
+    return request.config.getoption("--contract")
+
+
 @pytest.fixture(autouse=True)
 def enable_db_access_for_all_tests(db):
     pass
@@ -63,23 +77,27 @@ def multiple_conversions() -> list[Conversion]:
 
 
 @pytest.fixture
-def client(oas_path: Path):
-    schema_tester = SchemaTester(schema_file_path=str(oas_path))
-    return OpenAPINinjaClient(
-        router_or_app=router,
-        schema_tester=schema_tester,
-        path_prefix="/api/marketing",
-    )
+def client(oas_path: Path, contract_enabled: bool):
+    if contract_enabled:
+        schema_tester = SchemaTester(schema_file_path=str(oas_path))
+        return OpenAPINinjaClient(
+            router_or_app=router,
+            schema_tester=schema_tester,
+            path_prefix="/api/marketing",
+        )
+    return TestClient(router)
 
 
 @pytest.fixture
-def auth_client(oas_path: Path) -> TestClient:
-    schema_tester = SchemaTester(schema_file_path=str(oas_path))
-    return OpenAPINinjaClient(
-        router_or_app=auth_router,
-        schema_tester=schema_tester,
-        path_prefix="/api/auth",
-    )
+def auth_client(oas_path: Path, contract_enabled: bool) -> TestClient:
+    if contract_enabled:
+        schema_tester = SchemaTester(schema_file_path=str(oas_path))
+        return OpenAPINinjaClient(
+            router_or_app=auth_router,
+            schema_tester=schema_tester,
+            path_prefix="/api/auth",
+        )
+    return TestClient(auth_router)
 
 
 @pytest.fixture

@@ -42,7 +42,7 @@ tasks:
       - |
         if [ -z {{.CLI_ARGS}} ]; then
           echo "Executing all tests"
-          $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/"
+          $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/api/tests/"
         else
           for arg in {{.CLI_ARGS}}; do
             echo "Executing tests for app: $arg"
@@ -50,6 +50,26 @@ tasks:
           done
         fi
     silent: true
+
+  test-contract:
+    desc: Run all the tests
+    cmds:
+      - |
+        if [ -z {{.CLI_ARGS}} ]; then
+          echo "Executing all tests"
+          $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/api/tests/ --contract"
+        else
+          for arg in {{.CLI_ARGS}}; do
+            echo "Executing tests for app: $arg"
+            $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/${arg} --contract"
+          done
+        fi
+    silent: true
+
+  test-bdd:
+    desc: Run all the BDD tests
+    cmds:
+      - $DOCKER_COMPOSE run --rm marketing_op sh -c "poetry run python -m pytest -s -vv marketing_op/api/tests/bdd/"
 
   container-shell:
     cmds:

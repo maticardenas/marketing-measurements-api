@@ -1,3 +1,4 @@
+import uuid
 from http import HTTPStatus
 
 
@@ -31,9 +32,20 @@ def test_get_marketing_data(
     }
 
 
-def test_unauthorized_access(client: TestClient):
+def test_unauthorized_access_no_credentials(client: TestClient):
     # given - when
     response = client.get("/measurements/")
+
+    # then
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+
+
+def test_unauthorized_access(client: TestClient):
+    # given - when
+    response = client.get(
+        "/measurements/",
+        headers={"Authorization": f"Bearer {uuid.uuid4()}"},
+    )
 
     # then
     assert response.status_code == HTTPStatus.UNAUTHORIZED
