@@ -132,3 +132,17 @@ def test_get_conversions_filter_by_date(client: TestClient, token_auth_headers: 
     assert len(response.json()) == 1
     assert response.json()["data"][0]["campaign"] == "later_campaign"
     assert response.json()["data"][0]["date"] == "2023-02-01"
+
+
+def test_bad_request(client: TestClient, token_auth_headers: dict):
+    # given
+    query = "?start_date=2021-01-01&end_date=2020-01-01"
+
+    # when - then
+    response = client.get(
+        f"/measurements/{query}",
+        headers=token_auth_headers,
+    )
+
+    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.json() == {"detail": "End date should be greater than start date"}

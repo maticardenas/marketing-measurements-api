@@ -144,6 +144,14 @@ paths:
                         conversions: 1225.0170852049143
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    example: "End date should be greater than start date"
         '401':
           description: Unauthorized
           content:

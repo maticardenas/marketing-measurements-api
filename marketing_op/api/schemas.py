@@ -1,7 +1,11 @@
 from datetime import date as datetime_date
 
 from ninja import Schema
-from pydantic import BaseModel
+from ninja.errors import HttpError
+from pydantic import (
+    BaseModel,
+    model_validator,
+)
 
 
 class MarketingDataSchema(BaseModel):
@@ -20,6 +24,14 @@ class MarketingDataFilterSchema(Schema):
     channels: list[str] | None = None
     start_date: datetime_date | None = None
     end_date: datetime_date | None = None
+
+    @model_validator(mode="after")
+    def end_date_should_be_greater_than_start_date(self):
+        if self.start_date and self.end_date and self.start_date > self.end_date:
+            raise HttpError(
+                status_code=400, message="End date should be greater than start date"
+            )
+        return self
 
 
 class ChannelSalesPercentageSchema(Schema):

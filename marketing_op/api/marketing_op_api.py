@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from ninja import NinjaAPI, Router, Query
 from ninja.pagination import paginate
+
 from api.security import BasicAuth, AuthBearer
 from api.pagination import MarketingDataPagination
 from api.schemas import (
@@ -23,7 +24,7 @@ router = Router()
 
 @router.get(
     "/measurements/",
-    response={200: list[MarketingDataSchema]},
+    response={200: list[MarketingDataSchema], 401: dict, 400: dict},
     auth=AuthBearer(),
 )
 @paginate(MarketingDataPagination)
@@ -36,12 +37,13 @@ def marketing_measurements(
 
 @router.get(
     "/stats/channel-sales-percentages/",
-    response={200: list[ChannelSalesPercentageSchema]},
+    response={200: list[ChannelSalesPercentageSchema], 401: dict, 400: dict},
     auth=AuthBearer(),
 )
 @paginate(MarketingDataPagination)
 def channel_sales_percentages(
-    request: HttpRequest, filters: MarketingDataFilterSchema = Query(None)
+    request: HttpRequest,
+    filters: MarketingDataFilterSchema = Query(None),
 ):
     data = get_channel_sales_percentages(filters.dict() if filters else {})
     return data
@@ -49,7 +51,7 @@ def channel_sales_percentages(
 
 @router.get(
     "/stats/channel-weekly-sales/",
-    response={200: list[ChannelWeeklySalesSchema]},
+    response={200: list[ChannelWeeklySalesSchema], 401: dict, 400: dict},
     auth=AuthBearer(),
 )
 @paginate(MarketingDataPagination)
@@ -65,7 +67,7 @@ auth_router = Router()
 
 @auth_router.get(
     "/token/",
-    response={200: dict},
+    response={200: dict, 401: dict},
     auth=BasicAuth(),
 )
 def get_token(request: HttpRequest):
