@@ -172,6 +172,14 @@ paths:
                   detail:
                     type: string
                     example: "Invalid token"
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type:
+                 - object
+                 - array
   /api/marketing/stats/channel-sales-percentages/:
     get:
       operationId: api_marketing_op_api_channel_sales_percentages
@@ -297,6 +305,14 @@ paths:
                   detail:
                     type: string
                     example: "Invalid token"
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type:
+                 - object
+                 - array
   /api/marketing/stats/channel-weekly-sales/:
     get:
       operationId: api_marketing_op_api_channel_weekly_sales
@@ -427,6 +443,14 @@ paths:
                   detail:
                     type: string
                     example: "Invalid token"
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type:
+                 - object
+                 - array
 components:
   schemas:
     MarketingDataSchema:
