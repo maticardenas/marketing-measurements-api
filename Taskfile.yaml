@@ -4,7 +4,7 @@ env:
   DOCKER_COMPOSE: docker-compose -f docker-compose.local.yaml
 
 tasks:
-  rebuild-project:
+  build-project:
     desc: Rebuild the project
     cmds:
       - $DOCKER_COMPOSE down

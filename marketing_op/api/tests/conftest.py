@@ -2,6 +2,8 @@ import base64
 
 import pytest
 from ninja.testing import TestClient
+from openapi_tester import SchemaTester
+from openapi_tester.clients import OpenAPINinjaClient
 
 from api.marketing_op_api import router, auth_router
 from api.services.auth import generate_token
@@ -13,11 +15,19 @@ from api.tests.factories import (
     ChannelFactory,
 )
 from core.models import Product, Campaign, CampaignType, Conversion
+from pathlib import Path
+
+CURRENT_DIR = Path(__file__).resolve().parent
 
 
 @pytest.fixture(autouse=True)
 def enable_db_access_for_all_tests(db):
     pass
+
+
+@pytest.fixture
+def oas_path():
+    return CURRENT_DIR.parent / "design" / "openapi.yaml"
 
 
 @pytest.fixture
@@ -53,13 +63,23 @@ def multiple_conversions() -> list[Conversion]:
 
 
 @pytest.fixture
-def client():
-    return TestClient(router)
+def client(oas_path: Path):
+    schema_tester = SchemaTester(schema_file_path=str(oas_path))
+    return OpenAPINinjaClient(
+        router_or_app=router,
+        schema_tester=schema_tester,
+        path_prefix="/api/marketing",
+    )
 
 
 @pytest.fixture
-def auth_client() -> TestClient:
-    return TestClient(auth_router)
+def auth_client(oas_path: Path) -> TestClient:
+    schema_tester = SchemaTester(schema_file_path=str(oas_path))
+    return OpenAPINinjaClient(
+        router_or_app=auth_router,
+        schema_tester=schema_tester,
+        path_prefix="/api/auth",
+    )
 
 
 @pytest.fixture

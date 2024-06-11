@@ -23,7 +23,7 @@ def test_channel_sales_percentage(client: TestClient, token_auth_headers: dict):
 
     # when
     response = client.get(
-        "stats/channel-sales-percentages/", headers=token_auth_headers
+        "/stats/channel-sales-percentages/", headers=token_auth_headers
     )
 
     # then
@@ -64,7 +64,7 @@ def test_get_channel_weekly_sales(client: TestClient, token_auth_headers: dict):
     )
 
     # when
-    response = client.get("stats/channel-weekly-sales/", headers=token_auth_headers)
+    response = client.get("/stats/channel-weekly-sales/", headers=token_auth_headers)
 
     # then
     assert response.json() == {

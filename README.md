@@ -18,6 +18,10 @@ This project implements necessary services and API containing endpoints for prov
     - [Documentation](#documentation)
     - [Endpoints](#endpoints)
     - [Authentication](#authentication)
+    - [Pagination](#pagination)
+    - [Testing](#testing)
+      - [Factories](#factories)
+      - [Contract Testing](#contract-testing)
 
 
 ## Running the application
@@ -212,3 +216,23 @@ Then the token can be used in the Authorization header (Bearer Auth) to authenti
 ### Pagination
 
 The API endpoints implement a basic pagination, which you will be able to see in the OpenAPI schema, managed through the query parameters `offset` and `page_size` (default is `10`).
+
+> :information_source: Possible improvements here would be: 
+> - Implementation of pagination information within Link header or in the response body.
+
+
+### Testing
+
+There are included in the code some unit tests and also API tests, separated from the service functions for example (advantage of having a service layer). The tests can be run with the command `task test`.
+
+#### Factories
+
+For demo data creation (and as demonstration) I've used [factoryboy](https://factoryboy.readthedocs.io/en/stable/index.html) to implement [factories](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/tests/factories.py), which allow to easily create objects for testing purposes, and is also compatible with Django models.
+
+#### Contract Testing
+
+Tests also implement contract testing for all the API tests, this is done using [django-contract-tester](https://github.com/maticardenas/django-contract-tester) library, which implements a [client](https://github.com/maticardenas/django-contract-tester), that allow us to easily override our test clients and check in every existing tests, apart from the functional validations also if they match the written documentation/design.
+
+![contract_testing](media/contract_testing.png)
+
+This is very useful, specially in public APIs to keep consistency and make sure your API is always aligned with that the consumer expects.
