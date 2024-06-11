@@ -22,6 +22,7 @@ This project implements necessary services and API containing endpoints for prov
     - [Testing](#testing)
       - [Factories](#factories)
       - [Contract Testing](#contract-testing)
+      - [BDD](#bdd)
 
 
 ## Running the application
@@ -52,7 +53,7 @@ This command will first build the application (which can be also done by running
 
 The service implements token authentication (for demonstration purposes), so in order to perform requests to the API, you need to obtain a token to consume the marketing endpoints.
 
-Obtain a token by performing a request to the `GET /api/auth/token/` (Basic Auth). The service implements sample credentials username: `marketing_op` and password: `marketing_op_supersecret` which you can use for this.
+Obtain a token by performing a request to the `GET /api/auth/token/` (Basic Auth). The service implements sample credentials username: `marketing_op` and password: `marketing_op_supersecret` which you can use for this (base64 encoded).
 
 ```bash
 curl --location --request GET 'http://localhost:8000/api/auth/token/' \
@@ -235,4 +236,17 @@ Tests also implement contract testing for all the API tests, this is done using 
 
 ![contract_testing](media/contract_testing.png)
 
-This is very useful, specially in public APIs to keep consistency and make sure your API is always aligned with that the consumer expects.
+This is a useful features for all APIs, but specially in public APIs, to keep consistency and make sure your API is always aligned with that the consumer expects.
+The clients are instantiated as [fixtures](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/tests/conftest.py#L66), and how it works can be checked for example modifying the [openapi schema](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/design/openapi.yaml) (removing for example a response from an endpoint) and re-running the tests, they should fail stating an undocumented response error.
+
+#### BDD
+
+Behaviour driven development is a software development process which includes natural-language constructs and encourages collaboration among developers. 
+Within the tests suite there is an [example](https://github.com/maticardenas/marketing-measurements-op/tree/main/marketing_op/api/tests/bdd) of using [pytest-bdd](https://pypi.org/project/pytest-bdd/) to implement automation of tests, using Gherkin Language and facilitating behavioral driven development.
+
+```gherkin
+  Scenario: Retrieve marketing measurements for specific channel
+    Given a set of existing conversions for marketing campaigns
+    When requesting marketing measurements through API for a specific channel
+    Then I should receive a list of measurements for that channel
+```

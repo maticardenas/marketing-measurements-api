@@ -21,5 +21,3 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 RUN poetry install
-
-CMD ["poetry", "run", "python", "makerting_op/manage.py", "runserver", "0.0.0.0:8000"]
