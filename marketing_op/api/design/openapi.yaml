@@ -11,7 +11,9 @@ paths:
     get:
       operationId: api_marketing_op_api_get_token
       summary: Get Token
-      description: Retrieves the token necessary to authenticate the rest of the endpoints of the API.
+      description: |-
+        This endpoint retrieves a token for authentication.
+        You can use the token to authenticate thre rest of Marketing endpoints which use Bearer Authentication.
       security:
         - BasicAuth: []
       responses:
@@ -41,6 +43,9 @@ paths:
     get:
       operationId: marketing-measurements
       summary: Get Marketing Measurements
+      description: |-
+        This endpoint retrieves marketing measurements based on a set of filters.
+        You can manage the response size and pagination by using the `offset` and `page_size` parameters.
       security:
         - AuthBearer: []
       parameters:
@@ -296,6 +301,9 @@ paths:
     get:
       operationId: api_marketing_op_api_channel_weekly_sales
       summary: Channel Weekly Sales
+      description: |-
+        This endpoint retrieves channels weekly sales based on a set of filters.
+        You can manage the response size and pagination by using the `offset` and `page_size` parameters.
       security:
         - AuthBearer: []
       parameters:

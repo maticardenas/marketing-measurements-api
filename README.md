@@ -1,5 +1,5 @@
 
-# Marketing (Objective Platform)
+# Marketing (OP)
 
 This project implements necessary services and API containing endpoints for providing marketing measurements and insights to the front-end application
 
@@ -14,6 +14,7 @@ This project implements necessary services and API containing endpoints for prov
 - [Project Overview](#project-overview)
   - [Architecture](#architecture)
   - [Database](#database)
+  - [Libraries](#libraries)
   - [API](#api)
     - [Documentation](#documentation)
     - [Endpoints](#endpoints)
@@ -43,6 +44,8 @@ task run
 ```
 
 This command will first build the application (which can be also done by running `task build-project` before `task run`) and then run it. The application will be available at `http://localhost:8000`.
+
+> :information_source: You can also run the project detached by running `task run-detached`, which will run the application in the background (you can check the containers with `docker ps`).
 
 > :warning: When running the project for the first time, execution might take a bit longer as it needs to download the necessary docker images and build the application, plus perform the initial database migrations (among which inserting the demo data records is included)
 
@@ -184,6 +187,17 @@ ORDER BY 2 ASC,
 
 *Filtering for channels `radio`, `tv`, `facebook`, `instagram`.
 
+### Libraries
+
+The project uses the following 3rd party libraries, which are included also in later sections:
+
+- `django-ninja`: for building the API.
+- `pytest`: for testing.
+- `pytest-django`: for using pytest with django and facilitating features like database access.
+- `pytest-bdd`: for implementing bdd-style tests.
+- `factory-boy`: for creating test data.
+- `django-contract-tester`: for implementing contract testing within the functional test suite.
+
 ### API 
 
 ### Documentation
@@ -205,7 +219,7 @@ The API has four endpoints for the requested use cases, which details can be fou
 
 ### Authentication
 
-As briefly mentioned in the previous section, the API endpoints related to the marketing measurements require authentication, which is implemented with demonstration purposes. This is done through token-based authentication, where the user needs to obtain a token by providing a username and password (Basic Auth) to the `/api/token/` endpoint.
+As briefly mentioned in the previous section, the API endpoints related to the marketing measurements require authentication, which is implemented for demonstration purposes. This is done through token-based authentication, where the user needs to obtain a token by providing a username and password (Basic Auth) to the `/api/token/` endpoint.
 Then the token can be used in the Authorization header (Bearer Auth) to authenticate the user in the rest of the endpoints.
 
 ![auth](media/auth.png)
@@ -224,7 +238,7 @@ The API endpoints implement a basic pagination, which you will be able to see in
 
 ### Testing
 
-There are included in the code some unit tests and also API tests, separated from the service functions for example (advantage of having a service layer). The tests can be run with the command `task test`.
+There are some unit tests and also API tests included, separating the service functions tests for example (advantage of having a service layer). The tests can be run with the command `task test`.
 
 #### Factories
 
