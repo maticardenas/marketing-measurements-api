@@ -8,6 +8,9 @@ This project implements necessary services and API containing endpoints for prov
 - [Running the application](#running-the-application)
   - [Pre-requisites](#pre-requisites)
   - [Run](#run)
+  - [Requests](#requests)
+    - [Authentication](#authentication)
+    - [Performing requests](#performing-requests)
 - [Project Overview](#project-overview)
   - [Architecture](#architecture)
   - [Database](#database)
@@ -34,19 +37,42 @@ To run the application, you need to execute the following command:
 task run
 ```
 
-This command will first build the application (which can be also done by running `task rebuild-project` before `task run`) and then run it. The application will be available at `http://localhost:8000`.
+This command will first build the application (which can be also done by running `task build-project` before `task run`) and then run it. The application will be available at `http://localhost:8000`.
 
 > :warning: When running the project for the first time, execution might take a bit longer as it needs to download the necessary docker images and build the application, plus perform the initial database migrations (among which inserting the demo data records is included)
 
 
-### Performing requests
+### Requests
 
-Once the application is running, you can perform requests to the different endpoints.
+#### Authentication
 
-For example
+The service implements token authentication (for demonstration purposes), so in order to perform requests to the API, you need to obtain a token to consume the marketing endpoints.
+
+Obtain a token by performing a request to the `GET /api/auth/token/` (Basic Auth). The service implements sample credentials username: `marketing_op` and password: `marketing_op_supersecret` which you can use for this.
 
 ```bash
-curl --location --request GET 'http://localhost:8000/api/marketing/stats/channel-weekly-sales/?channels=facebook&start_date=2020-01-01&end_date=2020-02-01'
+curl --location --request GET 'http://localhost:8000/api/auth/token/' \
+--header 'Authorization: Basic bWFya2V0aW5nX29wOm1hcmtldGluZ19vcF9zdXBlcnNlY3JldA=='
+```
+
+The response will contain the token:
+
+```json
+{
+    "data": {
+        "token": "<token>"
+    }
+}
+```
+
+#### Performing requests
+
+Use the obtained token in previous step to perform requests to the marketing endpoints (Bearer Auth). 
+
+For example, to get the weekly sales per channel:
+
+```bash
+curl --location --request GET 'http://localhost:8000/api/marketing/stats/channel-weekly-sales/?channels=facebook&start_date=2020-01-01&end_date=2020-02-01' --header 'Authorization: Bearer <token>'
 ```
 
 Response:
@@ -174,7 +200,15 @@ The API has four endpoints for the requested use cases, which details can be fou
 
 ### Authentication
 
-As briefly mentioned in the previous section, the API endpoints related to the marketing measurements require authentication. This is done through token-based authentication, where the user needs to obtain a token by providing a username and password (Basic Auth) to the `/api/token/` endpoint.
+As briefly mentioned in the previous section, the API endpoints related to the marketing measurements require authentication, which is implemented with demonstration purposes. This is done through token-based authentication, where the user needs to obtain a token by providing a username and password (Basic Auth) to the `/api/token/` endpoint.
 Then the token can be used in the Authorization header (Bearer Auth) to authenticate the user in the rest of the endpoints.
 
 ![auth](media/auth.png)
+
+> :information_source: Possible improvements here would be: 
+> - Implementation of token expiration or refresh mechanism.
+> - Implementing a more secure authentication method (e.g. OAuth2, JWT).
+
+### Pagination
+
+The API endpoints implement a basic pagination, which you will be able to see in the OpenAPI schema, managed through the query parameters `offset` and `page_size` (default is `10`).
