@@ -124,10 +124,16 @@ Response:
 
 ### Tests
 
-To run the tests, you can execute the following command:
+To run all the tests (including the bdd scenario), you can execute the following command:
 
 ```bash
 task test
+```
+
+To run all the test with contract validation (described later in [Contract Testing](#contract-testing) section), you can execute the following command:
+
+```bash
+task test-contract
 ```
 
 ## Project Overview
@@ -251,7 +257,7 @@ Tests also implement contract testing for all the API tests, this is done using 
 ![contract_testing](media/contract_testing.png)
 
 This is a useful features for all APIs, but specially in public APIs, to keep consistency and make sure your API is always aligned with that the consumer expects.
-The clients are instantiated as [fixtures](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/tests/conftest.py#L66), and how it works can be checked for example modifying the [openapi schema](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/design/openapi.yaml) (removing for example a response from an endpoint) and re-running the tests, they should fail stating an undocumented response error.
+The clients are instantiated as [fixtures](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/tests/conftest.py#L80), running `task test-contract` will use the `--contract` flag which tells `pytest` to build the client to validate all tests against their OpenAPI schema. And how it works can be checked for example modifying the [openapi schema](https://github.com/maticardenas/marketing-measurements-op/blob/main/marketing_op/api/design/openapi.yaml) (removing for example a response from an endpoint) and re-running the tests, they should fail stating an undocumented response error.
 
 #### BDD
 
