@@ -3,6 +3,9 @@ info:
   title: Marketing Data (Objective Platform)
   version: 1.0.0
   description: "API for fetching marketing data measurements and insights."
+servers:
+  - url: http://localhost:8000
+    description: Local server
 paths:
   /api/auth/token/:
     get:
@@ -527,4 +530,3 @@ components:
     BasicAuth:
       type: http
       scheme: basic
-servers: []
