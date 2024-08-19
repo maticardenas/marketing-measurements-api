@@ -138,7 +138,7 @@ task test-contract
 
 ## Project Overview
 
-The application is built in Python. Given my recent experience and in order to make it faster to develop, the application is built using `Django`. The assignment stated that it was preferable to do it in `FastAPI` or `Flask`, so considering that I've chosen to implement it using [Django-Ninja](https://django-ninja.dev/), which is a web framework for building APIs with Django and, as described in their documentation, _"heavily inspired in FastAPI"_, sharing a lot of its concepts and structure (easy to use and intuitive, typed, high performant, based in standards, etc.) as you will be able to see in the source code. 
+The application is built in Python, using [Django-Ninja](https://django-ninja.dev/), which is a web framework for building APIs with Django and, as described in their documentation, _"heavily inspired in FastAPI"_, sharing a lot of its concepts and structure (easy to use and intuitive, typed, high performant, based in standards, etc.) as you will be able to see in the source code. 
 
 ### Architecture
 
