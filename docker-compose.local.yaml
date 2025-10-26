@@ -21,6 +21,7 @@ services:
       - "8000:8000"
     volumes:
       - ./marketing_op/:/usr/objective_platform/marketing_op/
+      - ./pyproject.toml:/usr/objective_platform/pyproject.toml
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./start_server.sh'
 
 volumes:

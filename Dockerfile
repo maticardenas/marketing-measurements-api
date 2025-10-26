@@ -20,4 +20,5 @@ COPY ./ ./
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN poetry install
+RUN rm -f poetry.lock && poetry lock --no-update
+RUN poetry install --no-interaction --no-ansi

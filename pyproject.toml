@@ -11,7 +11,7 @@ pytest = "^8.2.2"
 django-ninja = "^1.1.0"
 psycopg2 = "^2.9.9"
 pytest-django = "^4.8.0"
-django-contract-tester = "^1.4.0"
+django-contract-tester = { path = "django_contract_tester-1.6.1-py3-none-any.whl" }
 pytest-bdd = "^7.2.0"
 gunicorn = "^22.0.0"
 
@@ -27,3 +27,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "marketing_op.settings"
 addopts = ["--reuse-db", "--no-migrations"]
+
+[tool.django-contract-tester.validation]
+query_parameters = true
+request_for_non_successful_responses = false
