@@ -4,14 +4,15 @@ version = "0.1.0"
 description = "Marketing Measurement Data (Objective Platform)"
 authors = ["Matias Cardenas <cardenasmatias.1990@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 pytest = "^8.2.2"
 django-ninja = "^1.1.0"
 psycopg2 = "^2.9.9"
 pytest-django = "^4.8.0"
-django-contract-tester = { path = "django_contract_tester-1.6.1-py3-none-any.whl" }
+django-contract-tester = "^1.7.0"
 pytest-bdd = "^7.2.0"
 gunicorn = "^22.0.0"
 
